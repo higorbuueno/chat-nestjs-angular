@@ -1,0 +1,47 @@
+<div class="login-wrapper">
+  <div class="modal-header">
+    <h4 class="modal-title">Olá, estranho!</h4>
+  </div>
+  <div class="modal-body">
+    <h6 class="text-muted mb-2">Digite seu apelido a sala que deseja entrar</h6>
+    <div class="row mb-1">
+      <div class="col-12">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon1">@</span>
+          <input
+            [ngClass]="{ 'is-invalid': this.submited && !this.autor }"
+            [(ngModel)]="autor"
+            type="text"
+            class="form-control"
+            placeholder="Apelido"
+            aria-label="Apelido"
+            aria-describedby="basic-addon1"
+            (keyup.enter)="this.logar()"
+            />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon2">
+          <img src="../../../assets/key-svg.svg" alt="key" width="15px" />
+        </span>
+        <input
+          type="text"
+          [(ngModel)]="sala"
+          class="form-control"
+          placeholder="Código da sala"
+          aria-label="Código da sala"
+          aria-describedby="basic-addon2"
+          (keyup.enter)="this.logar()"
+          />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="this.logar()">
+      Entrar
+    </button>
+  </div>
+</div>

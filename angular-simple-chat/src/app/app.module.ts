@@ -5,8 +5,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
-const configSocketIo: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const configSocketIo: SocketIoConfig = { url: 'http://localhost:3000/chat-web-socket', options: {} };
 
 @NgModule({
   declarations: [
@@ -15,8 +18,15 @@ const configSocketIo: SocketIoConfig = { url: 'http://localhost:3000', options: 
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     SocketIoModule.forRoot(configSocketIo),
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      progressBar: true,
+      preventDuplicates: true,
+      resetTimeoutOnDuplicate: true
+    }), // ToastrModule added
   ],
   providers: [],
   bootstrap: [AppComponent]

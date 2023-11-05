@@ -1,10 +1,18 @@
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Login } from 'src/model/login';
-import { Mensagem } from 'src/model/mensagem';
+import { ChatEventDto } from '../../dto/chat-event';
+import { Login } from '../../dto/login';
+import { ChatService } from '../../chat.service';
 
-@WebSocketGateway({ cors: { origin: ['http://localhost:4200'] } })
+@WebSocketGateway({
+  namespace: 'chat-web-socket',
+  cors: { origin: ['http://localhost:4200'] }
+})
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+
+  constructor(
+    private _chatService: ChatService
+  ) { }
 
   @WebSocketServer()
   server: Server
@@ -12,7 +20,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   rooms: string[];
 
   handleConnection(client: any, ...args: any[]) {
-    console.log("Usuário conectado")
+    console.log("Usuário conectado");
   }
 
   handleDisconnect(client: any) {
@@ -20,20 +28,28 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('sendMessage')
-  handleMessage(socket: Socket, message: Mensagem) {
-    this.server.to(message.sala).emit('newMessage', message);
-    console.log(socket);
+  async handleMessage(socket: Socket, message: ChatEventDto) {
+    const chatEvent = await this._chatService.create(message);
+    this.server.to(message.sala).emit('chatEvent', chatEvent);
   }
 
   @SubscribeMessage('joinRoom')
-  handleJoinRoom(socket: Socket, login: Login) {
+  async handleJoinRoom(socket: Socket, login: Login) {
     socket.join(login.sala)
-    socket.emit('joinedRoom', login);
+    login.data = new Date();
+
+    const mensagem: ChatEventDto = { autor: login.autor, sala: login.sala, data: login.data, texto: "", joiningAutor: true }
+    const chatEvent = await this._chatService.create(mensagem);
+    socket.to(login.sala).emit('chatEvent', chatEvent);
   }
 
   @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(socket: Socket, login: Login) {
-    this.server.socketsLeave(login.sala)
-    socket.emit('leftRoom', login);
+  async handleLeaveRoom(socket: Socket, login: Login) {
+    socket.leave(login.sala)
+    login.data = new Date();
+
+    const mensagem: ChatEventDto = { autor: login.autor, sala: login.sala, data: login.data, texto: "", leavingAutor: true }
+    const chatEvent = await this._chatService.create(mensagem);
+    socket.to(login.sala).emit('chatEvent', chatEvent);
   }
 }

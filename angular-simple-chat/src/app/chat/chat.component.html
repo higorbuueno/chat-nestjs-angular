@@ -8,37 +8,68 @@
               class="card-header d-flex justify-content-between align-items-center p-3 styled-border-top"
             >
               <h5 class="mb-0">{{ this.salaAtual }}</h5>
-              <div class="d-flex flex-row align-items-center"></div>
+              <span>
+                <ng-icon
+                  name="heroArrowUturnLeft"
+                  class="cursor-pointer"
+                  ngbTooltip="Sair da sala"
+                  size="20"
+                  (click)="this.leaveRoom()"
+                ></ng-icon>
+              </span>
             </div>
             <div class="card-body" style="position: relative; height: 600px">
               <div *ngFor="let mensagem of this.mensagens">
-                <div
-                  class="d-flex flex-row justify-content-start"
+                <ng-container
                   *ngIf="
-                    mensagem.autor !== this.autorLogado;
-                    else mensagemEnviada
+                    mensagem.joiningAutor || mensagem.leavingAutor;
+                    else mensagemRecebida
                   "
                 >
-                  <img
-                    src="../../assets/user-icon.png"
-                    alt="avatar 1"
-                    style="width: 45px; height: 100%"
-                  />
-                  <div>
-                    <p class="small p-2 ms-3 mb-3 rounded-3 other-messages">
-                      <span class="d-flex flex-column">
-                        <strong>{{ mensagem.autor }}</strong>
-                        <span>
-                          {{ mensagem.texto }}
-                        </span>
-
-                        <small class="text-muted text-end">{{
-                          mensagem.data | date : "HH:mm"
-                        }}</small>
+                  <div class="text-center mb-2">
+                    <strong class="text-primary">
+                      {{ mensagem.autor }}
+                    </strong>
+                    {{ mensagem.joiningAutor ? "entrou" : "saiu" }}
+                    às
+                    <span class="text-muted">
+                      <span class="small">
+                        {{ mensagem.data | date : "HH:mm" }}
                       </span>
-                    </p>
+                    </span>
                   </div>
-                </div>
+                </ng-container>
+
+                <ng-template #mensagemRecebida>
+                  <ng-container
+                    *ngIf="
+                      mensagem.autor !== this.autorLogado;
+                      else mensagemEnviada
+                    "
+                  >
+                    <div class="d-flex flex-row justify-content-start">
+                      <img
+                        src="../../assets/user-icon.png"
+                        alt="avatar 1"
+                        style="width: 45px; height: 100%"
+                      />
+                      <div>
+                        <p class="small p-2 ms-3 rounded-3 other-messages">
+                          <span class="d-flex flex-column">
+                            <strong>{{ mensagem.autor }}</strong>
+                            <span>
+                              {{ mensagem.texto }}
+                            </span>
+
+                            <small class="text-muted text-end">{{
+                              mensagem.data | date : "HH:mm"
+                            }}</small>
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-template>
 
                 <ng-template #mensagemEnviada>
                   <div class="d-flex flex-row justify-content-end mb-0 pt-0">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Login } from 'src/app/model/login';
 
@@ -9,7 +9,7 @@ import { Login } from 'src/app/model/login';
 })
 export class LoginComponent {
 
-  autor: string = "";
+  @Input() autor: string = "";
   sala: string = "";
   submited: boolean = false;
 
@@ -22,7 +22,8 @@ export class LoginComponent {
     if (this.autor) {
       const login: Login = {
         autor: this.autor,
-        sala: this.sala
+        sala: this.sala,
+        data: new Date(),
       }
       
       this._activeModal.close(login)

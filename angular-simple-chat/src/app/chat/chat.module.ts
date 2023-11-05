@@ -4,7 +4,9 @@ import { RouterModule, Routes } from "@angular/router";
 import { ChatComponent } from "./chat.component";
 import { FormsModule } from "@angular/forms";
 import { LoginComponent } from './login/login.component';
-import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModalModule, NgbTooltipModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgIconsModule } from "@ng-icons/core";
+import { heroArrowUturnLeft } from '@ng-icons/heroicons/outline';
 
 const routes: Routes = [
   { path: '', redirectTo: 'chat', pathMatch: 'full' },
@@ -30,7 +32,9 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     FormsModule,
-    NgbModalModule
+    NgbModalModule,
+    NgbTooltipModule,
+    NgIconsModule.withIcons({  heroArrowUturnLeft }),
   ]
 })
 export class ChatModule { }

@@ -16,14 +16,14 @@ export class ChatService {
   }
 
   getNewMessage(): Observable<Mensagem> {
-    return this._socket.fromEvent<Mensagem>('newMessage');
+    return this._socket.fromEvent<Mensagem>('chatEvent');
   }
 
   joinRoom(login: Login) {
     this._socket.emit('joinRoom', login);
   }
 
-  listerJoiningUsers(): Observable<Login> {
-    return this._socket.fromEvent<Login>('joinedRoom');
+  leaveRoom(login: Login) {
+    this._socket.emit('leaveRoom', login);
   }
 }

@@ -5,7 +5,8 @@ import { Mensagem } from '../model/mensagem';
 import { LoginComponent } from './login/login.component';
 import { Login } from '../model/login';
 import { Subject, takeUntil } from 'rxjs';
-
+import { ChatHttpService } from './chat-http.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -15,16 +16,19 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   autorLogado: string = "";
   salaAtual: string = "";
-
   texto: string = "";
+  isLoading: boolean = false;
 
+  // SUBJECTS
   private _unsubscribeAll = new Subject<any>();
 
   mensagens = [] as Mensagem[];
 
   constructor(
     private _chatService: ChatService,
-    private _modalService: NgbModal
+    private _chatHttpService: ChatHttpService,
+    private _modalService: NgbModal,
+    private _toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -57,20 +61,27 @@ export class ChatComponent implements OnInit, OnDestroy {
     })
 
   }
-  
+
   joinRoomAndSubscribeMessages(login: Login) {
+    this.isLoading = true;
+    this._chatHttpService.getAllBySala(login.sala).subscribe({
+      next: (mensagens => {
+        this.mensagens = mensagens;
+      }),
+      error: (error => {
+        this._toastr.error("Erro ao buscar mensagens anteriores.", "Atenção")!
+      })
+    }).add(() => {
+      this.isLoading = false;
+      this._chatService.joinRoom(login);
+      this.subscribeMessages();
+    })
+  }
 
-    this._chatService.joinRoom(login);
-
+  subscribeMessages() {
     this._chatService.getNewMessage().pipe(takeUntil(this._unsubscribeAll)).subscribe({
       next: (newMessage => {
         this.mensagens.push(newMessage);
-      })
-    })
-
-    this._chatService.listerJoiningUsers().pipe(takeUntil(this._unsubscribeAll)).subscribe({
-      next: (newUser => {
-        this.mensagens.push({autor: newUser.autor, sala: newUser.sala, data: new Date(), texto: "", joiningAutor: true});
       })
     })
   }
@@ -86,5 +97,12 @@ export class ChatComponent implements OnInit, OnDestroy {
       this._chatService.sendMessage(mensagem);
       this.texto = "";
     }
+  }
+
+  leaveRoom() {
+    this.texto = "";
+    this._chatService.leaveRoom({ autor: this.autorLogado, data: new Date(), sala: this.salaAtual });
+    this.ngOnDestroy();
+    this.realizarLogin();
   }
 }

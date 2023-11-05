@@ -1,4 +1,4 @@
-export interface Mensagem {
+export interface ChatEventDto {
     autor: string;
     texto: string;
     data: Date;

@@ -20,11 +20,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   rooms: string[];
 
   handleConnection(client: any, ...args: any[]) {
-    console.log("Usuário conectado");
+    // console.log("Usuário conectado");
   }
 
   handleDisconnect(client: any) {
-    console.log("Usuário desconectado")
+    // console.log("Usuário desconectado")
   }
 
   @SubscribeMessage('sendMessage')

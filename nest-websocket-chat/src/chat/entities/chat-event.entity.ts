@@ -17,9 +17,9 @@ export class ChatEvent {
     @Column()
     sala: string;
 
-    @Column()
+    @Column({ default: false })
     joiningAutor: boolean;
 
-    @Column()
+    @Column({ default: false })
     leavingAutor: boolean;
 }

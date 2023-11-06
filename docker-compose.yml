@@ -1,0 +1,37 @@
+version: "1"
+
+services:
+  mysql:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: chat
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+
+  nest:
+    build: 
+      context: ./nest-websocket-chat
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    volumes:
+      - ./nest:/usr/nest-websocket-chat
+
+  angular:
+    build:
+      context: ./angular-simple-chat
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./angular:/usr/angular-simple-chat
+    
+volumes: 
+  mysql_data:

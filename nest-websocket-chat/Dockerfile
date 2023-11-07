@@ -22,4 +22,4 @@ RUN npm install
 EXPOSE 3000
 
 # Comando para iniciar o servidor de desenvolvimento do Nest
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:prod"]

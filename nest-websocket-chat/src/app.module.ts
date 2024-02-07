@@ -6,7 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatEvent } from './chat/entities/chat-event.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
+import { UserModule } from './user/user.module';
 import * as path from 'path';
+import { User } from './user/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 if (process.env.NODE_ENV === 'production') {
 
@@ -27,6 +30,7 @@ if (process.env.NODE_ENV === 'production') {
       isGlobal: true
     }),
     ChatModule,
+    UserModule,
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -36,10 +40,11 @@ if (process.env.NODE_ENV === 'production') {
         username: configService.get<string>("DB_USERNAME"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_NAME"),
-        entities: [ChatEvent],
+        entities: [ChatEvent, User],
         synchronize: configService.get<boolean>("DB_SYNCHRONIZATION"),
       })
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

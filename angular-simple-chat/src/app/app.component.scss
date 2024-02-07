@@ -1,0 +1,28 @@
+.app-wrapper {
+  .btn-play-pause {
+    position: absolute;
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+  }
+
+  .back-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+  }
+}
+
+.bg-image {
+  overflow: hidden; /* Evita a rolagem da página */
+  background-image: url("../assets/bg/main-bg.jpg");
+  background-size: cover; /* Cobrir todo o espaço disponível mantendo a proporção da imagem */
+  background-position: center; /* Centralizar a imagem */
+  background-attachment: fixed; /* Fixa a imagem de fundo para que ela não role com o conteúdo */
+}

@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<div class="app-wrapper" [ngClass]="{ 'bg-image': !this.showVideo }">
+  <button
+    class="btn-play-pause mt-1 ms-1 p-1"
+    (click)="this.showVideo = !this.showVideo"
+  >
+    <img src="../assets/svg/play-pause.svg" width="15px" alt="play-pause" />
+  </button>
+  <video autoplay loop muted class="back-video" *ngIf="this.showVideo">
+    <source src="./../assets/mp4/woman-running.mp4" type="video/mp4" />
+  </video>
+
+  <router-outlet></router-outlet>
+</div>

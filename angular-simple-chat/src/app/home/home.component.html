@@ -1,0 +1,137 @@
+<div class="home-wrapper">
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <section class="layout">
+      <div class="sidebar bg-white">
+        <div
+          class="d-flex p-2 ps-3 pe-3 gap-3 justify-content-start align-items-center"
+        >
+          <span class="bg-black perfil-photo"> &nbsp; </span>
+          <div>
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+
+        <hr class="m-0" />
+
+        <div class="pt-3">
+          <h4 class="chats-title ps-3">Chats</h4>
+          <div class="container ps-0 ms-0">
+            <div class="chat-list">
+              <div
+                [ngClass]="{ 'chat-ativo': chat.id === this.chatAtual.id }"
+                class="chat-item p-3"
+                *ngFor="let chat of chats"
+                (click)="this.selecionarChat(chat)"
+              >
+                <div class="d-flex flex-column">
+                  <span
+                    [ngClass]="{ 'fw-bold': !chat.lido }"
+                    class="d-flex justify-content-between"
+                  >
+                    <span class="fw-semibold"> {{ chat.sala }}</span>
+                    <span
+                      >{{ chat.ultimaMensagem?.data | date : "HH:mm" }}
+                      <span class="text-warning" *ngIf="!chat.lido"
+                        >•</span
+                      ></span
+                    >
+                  </span>
+                  <span class="text-muted last-message">
+                    <span class="fw-semibold" *ngIf="chat.isGrupo"
+                      >{{ chat.ultimaMensagem?.autor }}:</span
+                    >
+                    {{ chat.ultimaMensagem?.texto }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <section class="layout-inside-chat">
+          <div class="main p-2">
+            <div class="message-box">
+              <div *ngFor="let mensagem of this.mensagens">
+                <ng-container
+                  *ngIf="
+                    mensagem.joiningAutor || mensagem.leavingAutor;
+                    else mensagemRecebida
+                  "
+                >
+                  <div class="bg-white text-center mb-2">
+                    <strong class="text-primary">
+                      {{ mensagem.autor }}
+                    </strong>
+                    {{ mensagem.joiningAutor ? "entrou" : "saiu" }}
+                    às
+                    <span class="text-muted">
+                      <span class="small">
+                        {{ mensagem.data | date : "HH:mm" }}
+                      </span>
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-template #mensagemRecebida>
+                  <ng-container
+                    *ngIf="
+                      mensagem.autor !== this.autorLogado;
+                      else mensagemEnviada
+                    "
+                  >
+                    <div
+                      class="d-flex flex-row justify-content-start w-100-percent"
+                    >
+                      <div>
+                        <p class="small p-2 ms-3 rounded-3 other-messages">
+                          <span class="d-flex flex-column">
+                            <strong>{{ mensagem.autor }}</strong>
+                            <span>
+                              {{ mensagem.texto }}
+                            </span>
+                            <small class="text-muted text-end">
+                              {{ mensagem.data | date : "HH:mm" }}
+                            </small>
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-template>
+
+                <ng-template #mensagemEnviada>
+                  <div class="d-flex flex-row justify-content-end mb-2 pt-0">
+                    <div>
+                      <p
+                        class="small p-2 me-3 mb-1 text-white rounded-3 bg-sent-messages d-flex flex-column"
+                      >
+                        <span>
+                          {{ mensagem.texto }}
+                        </span>
+
+                        <small class="text-muted text-end">{{
+                          mensagem.data | date : "HH:mm"
+                        }}</small>
+                      </p>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div
+              class="d-flex p-2 ps-3 pe-3 gap-3 justify-content-start align-items-center"
+            >
+              <div class="w-100">
+                <input class="form-control" type="text" />
+              </div>
+              <button class="btn btn-warning bg-sent-messages send-icon">Enviar</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+</div>

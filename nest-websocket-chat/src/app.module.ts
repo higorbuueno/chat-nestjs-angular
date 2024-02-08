@@ -10,6 +10,8 @@ import { UserModule } from './user/user.module';
 import * as path from 'path';
 import { User } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 if (process.env.NODE_ENV === 'production') {
 
@@ -29,8 +31,6 @@ if (process.env.NODE_ENV === 'production') {
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    ChatModule,
-    UserModule,
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -44,9 +44,20 @@ if (process.env.NODE_ENV === 'production') {
         synchronize: configService.get<boolean>("DB_SYNCHRONIZATION"),
       })
     }),
+    ChatModule,
+    UserModule,
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    /**
+     * The JWT warden protect all routes bollow him, so, in this case, in the AppModule, it will protect all the application
+     */
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    }
+  ],
 })
 export class AppModule { }

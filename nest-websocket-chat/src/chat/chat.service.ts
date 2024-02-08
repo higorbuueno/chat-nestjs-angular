@@ -14,7 +14,6 @@ export class ChatService {
 
 
   findAllMessagesByRoom(room: string) {
-    console.log(room);
     return this.chatEventsRepository.findBy({
       sala: room
     })

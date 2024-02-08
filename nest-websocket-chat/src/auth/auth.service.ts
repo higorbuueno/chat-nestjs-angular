@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { UserPayload } from './models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
 import { UserToken } from './models/UserToken';
+import { UnauthorizedError } from './errors/unauthorized.error';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
             }
         }
 
-        throw new Error("Email e/ou senha incorretos");
+        throw new UnauthorizedError("Email e/ou senha incorretos");
     }
 
     login(user: User): UserToken {
@@ -39,7 +40,6 @@ export class AuthService {
             email: user.email,
             name: user.name
         }
-
         const jwtToken = this._jwtService.sign(payload);
         return {
             access_token: jwtToken

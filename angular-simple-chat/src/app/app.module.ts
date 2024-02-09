@@ -5,9 +5,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { TokenInterceptor } from './auth/TokenInterceptor';
+import { AuthGuard } from './auth/guards/auth.guards';
 
 const configSocketIo: SocketIoConfig = { url: 'http://localhost:3000/chat-web-socket', options: {} };
 
@@ -28,7 +30,15 @@ const configSocketIo: SocketIoConfig = { url: 'http://localhost:3000/chat-web-so
       resetTimeoutOnDuplicate: true
     }), // ToastrModule added
   ],
-  providers: [],
+  providers: [
+    TokenInterceptor,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+    AuthGuard,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

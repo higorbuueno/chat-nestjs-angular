@@ -1,6 +1,6 @@
 <div class="register-wrapper">
   <section>
-    <form [formGroup]="this.form" (submit)="this.submit()" class="w-100">
+    <form [formGroup]="this.form" (submit)="this.register()" class="w-100">
       <h1>Registrar-se</h1>
       <div class="inputbox">
         <input type="text" formControlName="name" />
@@ -14,15 +14,13 @@
         <input type="password" formControlName="password" />
         <label for="">Senha</label>
       </div>
-      <div class="forget d-flex justify-content-between text-white">
+      <div class="forget text-white">
         <div class="d-flex">
           <input id="remember-me" type="checkbox" />
           <label class="d-flex align-items-center ms-1" for="remember-me"
             >Lembrar de mim</label
           >
         </div>
-
-        <a href="#" class="text-white fw-bold">Esqueceu a senha?</a>
       </div>
       <button class="register-btn" type="submit">Registrar</button>
       <div class="login">

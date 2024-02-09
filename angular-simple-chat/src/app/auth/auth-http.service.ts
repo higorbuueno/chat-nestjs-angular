@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Mensagem } from '../model/mensagem';
+import { Usuario } from '../model/usuario';
+import { Token } from '../model/token';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +14,11 @@ export class AuthHttpService {
   ) { }
 
   /**
-  * Função para buscar todas mensagens da sala;
-  * @param sala 
+  * Função para realizar login;
+  * @param login 
   * @returns 
   */
-  getAllBySala(sala = "") {
-    const params = {
-      sala: sala
-    }
-    return this._http.get<Mensagem[]>(`${environment.apiUrl}/api/chat/messages-by-room`, { params })
+  login(login: Usuario) {
+    return this._http.post<Token>(`${environment.apiUrl}/login`, login);
   }
 }

@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Chat } from '../model/chat';
 import { Mensagem } from '../model/mensagem';
+import { AuthService } from '../auth/auth.service';
+import { SessionStorageService } from '../utils/session-storage.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +10,9 @@ import { Mensagem } from '../model/mensagem';
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+
+  constructor(private _sessionStorageService: SessionStorageService) { }
 
   chatAtual: Chat = { id: 1, data: new Date, sala: 'Raquel', ultimaMensagem: { autor: 'Raquel', data: new Date(), sala: 'HigorERaquel', texto: 'Oieee amorrrr, tudo bem?' }, lido: true, ativo: true };
 
@@ -104,6 +108,10 @@ export class HomeComponent {
       leavingAutor: false,
     },
   ];
+
+  ngOnInit(): void {
+    console.log( JSON.parse(this._sessionStorageService.getItem('user')));
+  }
 
   selecionarChat(chat: Chat) {
     this.chatAtual.id = chat.id;

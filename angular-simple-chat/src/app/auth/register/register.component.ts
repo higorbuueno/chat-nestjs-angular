@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Token } from 'src/app/model/token';
+import { Usuario } from 'src/app/model/usuario';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +23,8 @@ export class RegisterComponent implements OnInit {
     private _fb: FormBuilder
   ) { }
 
-  form!: FormGroup;
+  public preventAbuse: boolean = false;
+  public form!: FormGroup;
 
   ngOnInit(): void {
     this.initForm();
@@ -35,7 +38,9 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  submit(){
-    console.log(this.form.value);
+  register() {
+
   }
+
+
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { ChatEvent } from "src/chat/entities/chat-event.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
 @Unique(['email'])
@@ -14,4 +15,7 @@ export class User {
 
     @Column()
     password: string;
+
+    @OneToMany(() => ChatEvent, chatEvent => chatEvent.room)
+    chatEvents: ChatEvent[];
 }

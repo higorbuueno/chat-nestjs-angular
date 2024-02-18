@@ -8,8 +8,8 @@ export class ChatController {
   @Get("messages-by-room")
   findAllMessagesByRoom(
     @Query() params: any
-    ) {
-    return this.chatService.findAllMessagesByRoom(params.sala);
+  ) {
+    return this.chatService.findAllMessagesByRoom(params.roomId);
   }
 
 }

@@ -38,7 +38,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     socket.join(login.sala)
     login.data = new Date();
 
-    const mensagem: ChatEventDto = { autor: login.autor, sala: login.sala, data: login.data, texto: "", joiningAutor: true }
+    const mensagem: ChatEventDto = { autor: {name: login.autor, id: 1}, sala: login.sala, data: login.data, texto: "", joiningAutor: true }
     const chatEvent = await this._chatService.create(mensagem);
     socket.to(login.sala).emit('chatEvent', chatEvent);
   }
@@ -48,7 +48,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     socket.leave(login.sala)
     login.data = new Date();
 
-    const mensagem: ChatEventDto = { autor: login.autor, sala: login.sala, data: login.data, texto: "", leavingAutor: true }
+    const mensagem: ChatEventDto = { autor: {name: login.autor, id: 1}, sala: login.sala, data: login.data, texto: "", leavingAutor: true }
     const chatEvent = await this._chatService.create(mensagem);
     socket.to(login.sala).emit('chatEvent', chatEvent);
   }

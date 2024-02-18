@@ -12,6 +12,8 @@ import { User } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { RoomModule } from './room/room.module';
+import { Room } from './room/entities/room.entity';
 
 if (process.env.NODE_ENV === 'production') {
 
@@ -40,13 +42,18 @@ if (process.env.NODE_ENV === 'production') {
         username: configService.get<string>("DB_USERNAME"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_NAME"),
-        entities: [ChatEvent, User],
+        entities: [
+          ChatEvent,
+          User,
+          Room,
+        ],
         synchronize: configService.get<boolean>("DB_SYNCHRONIZATION"),
       })
     }),
     ChatModule,
     UserModule,
     AuthModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [
